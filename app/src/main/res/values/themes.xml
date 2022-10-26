@@ -12,5 +12,16 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
+        <!-- styler bla. teksten i inputs -->
+        <item name="android:colorForeground">@color/white</item>
+
+        <!-- Text -->
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorHint">@color/washed_white</item>
+
+        <!-- Line under input -->
+        <item name="colorControlNormal">@color/white</item>
     </style>
 </resources>
