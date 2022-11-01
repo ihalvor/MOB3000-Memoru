@@ -9,6 +9,7 @@
     tools:context=".MainActivity">
 
     <ImageView
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/memoru"/>
@@ -42,6 +43,7 @@
             android:layout_marginVertical="10dp"/>
 
         <Button
+            app:iconGravity="textStart"
             android:id="@+id/btn_settings"
             android:text="Settings"
             app:icon="@drawable/ic_baseline_settings_24"

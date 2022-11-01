@@ -43,6 +43,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
+        android:scaleType="fitXY"
         android:layout_marginTop="@dimen/spacing_large"
         android:id="@+id/img_my_image"
         android:src="@drawable/snapchat"
