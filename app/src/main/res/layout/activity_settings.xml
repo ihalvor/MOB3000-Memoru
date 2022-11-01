@@ -5,6 +5,78 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_gray"
     tools:context=".ActivitySettings">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:paddingTop="@dimen/spacing_small"
+        android:paddingHorizontal="@dimen/spacing_large"
+        android:id="@+id/top_bar"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            app:layout_constraintDimensionRatio="1:1"
+            android:src="@drawable/m"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.12"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.6"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content">
+
+
+        <Button
+            app:iconGravity="textStart"
+            android:id="@+id/btn_faq"
+            android:text="FAQ"
+            app:icon="@drawable/ic_baseline_help_outline_24"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"/>
+
+        <Button
+            app:iconGravity="textStart"
+            android:id="@+id/btn_license"
+            android:text="license"
+            app:icon="@drawable/ic_baseline_assignment_turned_in_24"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"/>
+
+        <Button
+            app:iconGravity="textStart"
+            android:id="@+id/btn_log_out"
+            android:text="Log out"
+            app:icon="@drawable/ic_baseline_logout_24"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"/>
+
+    </LinearLayout>
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
