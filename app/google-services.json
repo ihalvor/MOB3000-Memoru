@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "188656132588",
+    "project_id": "memoru-fcd0a",
+    "storage_bucket": "memoru-fcd0a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:188656132588:android:84a59b523ba0c2722fe0c9",
+        "android_client_info": {
+          "package_name": "com.example.memorutest1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "188656132588-8hk7had0kjv4o1abmn92k3ssic76ukbu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7yAAzzvKRf8Zofe0vZrbeRo0czmRRenM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "188656132588-8hk7had0kjv4o1abmn92k3ssic76ukbu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
