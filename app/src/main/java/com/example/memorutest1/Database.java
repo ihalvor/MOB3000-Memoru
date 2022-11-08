@@ -2,9 +2,8 @@ package com.example.memorutest1;
 
 import android.graphics.Bitmap;
 
-import androidx.annotation.NonNull;
+import android.net.Uri;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
