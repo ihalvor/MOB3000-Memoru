@@ -8,6 +8,7 @@
     <dimen name="spacing_small">5dp</dimen>
     <dimen name="spacing_medium">10dp</dimen>
     <dimen name="spacing_large">20dp</dimen>
+    <string name="title_activity_maps">MapsActivity</string>
 
 
 </resources>

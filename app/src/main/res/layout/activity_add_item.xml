@@ -33,7 +33,8 @@
             android:layout_width="0dp"
             android:layout_height="0dp"/>
 
-        <TextView
+        <Button
+            android:id="@+id/btn_save"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:text="save"
@@ -82,6 +83,7 @@
             android:layout_height="wrap_content"/>
 
         <EditText
+            android:id="@+id/edt_name"
             android:inputType="text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -89,11 +91,12 @@
 
         <TextView
             android:layout_marginTop="@dimen/spacing_medium"
-            android:text="location"
+            android:text="Location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <EditText
+            android:id="@+id/edt_location"
             android:inputType="text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -106,6 +109,7 @@
             android:layout_height="wrap_content"/>
 
         <EditText
+            android:id="@+id/edt_description"
             android:padding="@dimen/spacing_small"
             android:gravity="top"
             android:minLines="@integer/text_field_lines"
