@@ -13,14 +13,25 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.squareup.picasso.Picasso;
 
 public class ActivityAddItem extends AppCompatActivity {
 
     private Bitmap image;
     private Database database;
+
+    private FirebaseAuth mAuth;
+    private FirebaseUser user;
 
     private ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
         new ActivityResultContracts.StartActivityForResult(),
@@ -44,10 +55,13 @@ public class ActivityAddItem extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        checkForUser();
         database = new Database();
         setContentView(R.layout.activity_add_item);
 
-        findViewById(R.id.txt_retake).setOnClickListener(view -> takePicture());
+        findViewById(R.id.txt_retake).setOnClickListener((View view) -> takePicture());
+
+        findViewById(R.id.btn_save).setOnClickListener((View view) -> uploadItem());
 
         /*database.downloadImage("a/image.png").addOnCompleteListener(uriTask -> {
                 try {
@@ -61,6 +75,18 @@ public class ActivityAddItem extends AppCompatActivity {
         takePicture();
     }
 
+    private void checkForUser() {
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+
+        if(user != null) {
+
+        } else {
+            finish();
+            startActivity(new Intent(this, ActivityLogIn.class));
+        }
+    }
+
     private void takePicture() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -70,4 +96,27 @@ public class ActivityAddItem extends AppCompatActivity {
 
         }
     }
+
+    private void uploadItem() {
+        String name = ((EditText) findViewById(R.id.edt_name)).getText().toString();
+        String location = ((EditText) findViewById(R.id.edt_location)).getText().toString();
+        String description = ((EditText) findViewById(R.id.edt_description)).getText().toString();
+        String userID = user.getUid();
+
+        database.uploadItem(name, location, description, userID)
+                .addOnSuccessListener(this, (DocumentReference reference) -> {
+                    database.uploadCompressedImage(
+                            image,
+                            Database.findImageAddress(userID, reference.getId(), Database.ImageType.MAIN_IMAGE),
+                            Bitmap.CompressFormat.PNG,
+                            100)
+                            .addOnSuccessListener(this, s -> {
+                                Toast.makeText(this, "Item uploaded", Toast.LENGTH_SHORT).show();
+                            });
+                })
+                .addOnFailureListener(this, a -> {
+                    Toast.makeText(this, "Upload failed", Toast.LENGTH_SHORT).show();
+                });
+    }
+
 }
