@@ -8,4 +8,76 @@
     android:background="@color/background_gray"
     tools:context=".ActivityMyItems">
 
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:paddingTop="@dimen/spacing_small"
+        android:paddingHorizontal="@dimen/spacing_large"
+        android:id="@+id/top_bar"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.6"
+            android:text="My items"
+            android:textSize="30dp"
+            android:fontFamily="sans-serif"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <ScrollView
+        android:layout_marginHorizontal="20dp"
+        android:orientation="vertical"
+        android:background="@color/text_background_gray"
+        app:layout_constraintTop_toBottomOf="@+id/top_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:background="@color/text_background_gray"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <include layout="@layout/my_item"/>
+            <include layout="@layout/my_item"/>
+            <include layout="@layout/my_item"/>
+            <include layout="@layout/my_item"/>
+            <include layout="@layout/my_item"/>
+            <include layout="@layout/my_item"/>
+            <include layout="@layout/my_item"/>
+            <include layout="@layout/my_item"/>
+            <include layout="@layout/my_item"/>
+            <include layout="@layout/my_item"/>
+            <include layout="@layout/my_item"/>
+            <include layout="@layout/my_item"/>
+            <include layout="@layout/my_item"/>
+            <include layout="@layout/my_item"/>
+            <include layout="@layout/my_item"/>
+            <include layout="@layout/my_item"/>
+            <include layout="@layout/my_item"/>
+            <include layout="@layout/my_item"/>
+            <include layout="@layout/my_item"/>
+            <include layout="@layout/my_item"/>
+            <include layout="@layout/my_item"/>
+            <include layout="@layout/my_item"/>
+            <include layout="@layout/my_item"/>
+            
+        </LinearLayout>
+    </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
