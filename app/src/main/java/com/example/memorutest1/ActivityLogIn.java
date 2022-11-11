@@ -33,6 +33,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 public class ActivityLogIn extends AppCompatActivity {
 
     private static final String TAG = "LOGIN";
+    public static final String FROM_LOGIN_INTENT = "fromLogin";
 
     // One tap sign in/ sign up
     private SignInClient oneTapClient;
@@ -179,8 +180,10 @@ public class ActivityLogIn extends AppCompatActivity {
         if(user != null) {
             showOneTapUI = false;
             // Launch new activity
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("fromLogin", true);
             finish();
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(intent);
         }
     }
 

@@ -5,12 +5,28 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
+
+    private boolean welcomeUser;
+    private boolean justCreated = false;
+
+    private FirebaseAuth mAuth;
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        checkForUser();
+        if(checkForJustLoggedIn()) {
+            Toast.makeText(this, "Signed in as " + user.getEmail(), Toast.LENGTH_SHORT).show();
+        }
+
         setContentView(R.layout.activity_main);
 
         findViewById(R.id.btn_new_item).setOnClickListener(view -> {

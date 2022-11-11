@@ -1,10 +1,14 @@
 package com.example.memorutest1;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 
 import android.net.Uri;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -15,7 +19,6 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
-
 
 public class Database {
 
@@ -50,7 +53,11 @@ public class Database {
         item.put("description", description);
         item.put("userID", userID);
 
-        return firestore.collection("items").add(item);
+        return firestore.collection(userID).add(item);
+    }
+
+    public void downloadUserItems(String userID) {
+
     }
 
     public static String findImageAddress(String userID, String itemID, ImageType type) {
@@ -58,5 +65,7 @@ public class Database {
                 + (type == ImageType.MAIN_IMAGE? "/images/" : "/receipts/")
                 + itemID;
     }
+
+
 
 }
