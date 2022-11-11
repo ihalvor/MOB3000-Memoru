@@ -25,4 +25,23 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, ActivitySettings.class));
         });
     }
+
+
+
+    private boolean checkForJustLoggedIn() {
+        return getIntent().getBooleanExtra(ActivityLogIn.FROM_LOGIN_INTENT, false);
+    }
+
+    private void checkForUser() {
+
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+
+            if(user != null) {
+
+        } else {
+            finish();
+            startActivity(new Intent(this, ActivityLogIn.class));
+        }
+    }
 }
