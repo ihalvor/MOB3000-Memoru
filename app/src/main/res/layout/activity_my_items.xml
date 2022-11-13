@@ -47,12 +47,13 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
+            android:id="@+id/layout_scroll"
             android:orientation="vertical"
             android:background="@color/text_background_gray"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-
+            <!--
             <include layout="@layout/my_item"/>
             <include layout="@layout/my_item"/>
             <include layout="@layout/my_item"/>
@@ -76,7 +77,7 @@
             <include layout="@layout/my_item"/>
             <include layout="@layout/my_item"/>
             <include layout="@layout/my_item"/>
-            
+            -->
         </LinearLayout>
     </ScrollView>
 

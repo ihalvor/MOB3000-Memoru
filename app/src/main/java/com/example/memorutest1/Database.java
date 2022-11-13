@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -74,8 +75,8 @@ public class Database {
         return firestore.collection(userID).add(item);
     }
 
-    public void downloadUserItems(String userID) {
-
+    public Task<QuerySnapshot> downloadUserItems(String userID) {
+        return firestore.collection(userID).get();
     }
 
     public static String findImageAddress(String userID, String itemID, ImageType type) {

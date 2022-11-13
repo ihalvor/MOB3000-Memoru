@@ -8,6 +8,7 @@
     android:layout_height="50dp">
 
     <TextView
+        android:id="@+id/txt_name"
         android:text="My item Numero 1"
         android:padding="@dimen/spacing_medium"
         app:layout_constraintBottom_toBottomOf="parent"
