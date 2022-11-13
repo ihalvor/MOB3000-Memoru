@@ -28,7 +28,6 @@ import com.squareup.picasso.Picasso;
 public class ActivityAddItem extends AppCompatActivity {
 
     private Bitmap image;
-    private Database database;
 
     private FirebaseAuth mAuth;
     private FirebaseUser user;
@@ -43,7 +42,7 @@ public class ActivityAddItem extends AppCompatActivity {
             image = (Bitmap)  bundle.get("data");
             ((ImageView) findViewById(R.id.img_my_image)).setImageBitmap(image);
 
-            database.uploadCompressedImage(
+            Database.getInstance().uploadCompressedImage(
                     image,
                     "a/image.png",
                     Bitmap.CompressFormat.PNG,
@@ -56,7 +55,8 @@ public class ActivityAddItem extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         checkForUser();
-        database = new Database();
+        Database database = Database.getInstance();
+
         setContentView(R.layout.activity_add_item);
 
         findViewById(R.id.txt_retake).setOnClickListener((View view) -> takePicture());
@@ -103,11 +103,13 @@ public class ActivityAddItem extends AppCompatActivity {
         String description = ((EditText) findViewById(R.id.edt_description)).getText().toString();
         String userID = user.getUid();
 
+        Database database = Database.getInstance();
+
         database.uploadItem(name, location, description, userID)
                 .addOnSuccessListener(this, (DocumentReference reference) -> {
                     database.uploadCompressedImage(
                             image,
-                            Database.findImageAddress(userID, reference.getId(), Database.ImageType.MAIN_IMAGE),
+                            Database.findImageAddress(userID, reference.getId(), Database.ImageType.ITEM),
                             Bitmap.CompressFormat.PNG,
                             100)
                             .addOnSuccessListener(this, s -> {

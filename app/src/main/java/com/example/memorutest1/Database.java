@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,17 +25,33 @@ import java.util.Map;
 public class Database {
 
     public enum ImageType {
-        MAIN_IMAGE, RECIEEPT_IMAGE
+        ITEM, RECEIPT;
+
+        @NonNull
+        @Override
+        public String toString() {
+            switch(this) {
+                case ITEM:      return "/images/";
+                case RECEIPT:   return "/receipts/";
+                default:        return "/other/";
+            }
+        }
     }
+
+    private static Database database = new Database();
 
     private FirebaseStorage storage;
     private StorageReference storageReference;
     private FirebaseFirestore firestore;
 
-    public Database() {
+    private Database() {
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
         firestore = FirebaseFirestore.getInstance();
+    }
+
+    public static Database getInstance() {
+        return database;
     }
 
     public UploadTask uploadCompressedImage(Bitmap image, String address, Bitmap.CompressFormat format, int compression) {
@@ -62,7 +80,7 @@ public class Database {
 
     public static String findImageAddress(String userID, String itemID, ImageType type) {
         return userID + "/" 
-                + (type == ImageType.MAIN_IMAGE? "/images/" : "/receipts/")
+                + type.toString()
                 + itemID;
     }
 
