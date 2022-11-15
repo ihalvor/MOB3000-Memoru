@@ -13,7 +13,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -75,8 +77,20 @@ public class Database {
         return firestore.collection(userID).add(item);
     }
 
+    public void updateItem(String userID, String itemID, String field, String value) {
+        firestore.collection(userID).document(itemID).update(field, value);
+    }
+
     public Task<QuerySnapshot> downloadUserItems(String userID) {
-        return firestore.collection(userID).get();
+        return firestore.collection(userID)
+                .orderBy("name", Query.Direction.DESCENDING)
+                .get();
+    }
+
+    public Task<DocumentSnapshot> downloadUserItem(String userID, String itemID) {
+        return firestore.collection(userID)
+                .document(itemID)
+                .get();
     }
 
     public static String findImageAddress(String userID, String itemID, ImageType type) {
