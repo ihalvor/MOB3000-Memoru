@@ -23,7 +23,10 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.squareup.picasso.Picasso;
+
+import java.util.Map;
 
 public class ActivityAddItem extends AppCompatActivity {
 
@@ -31,6 +34,13 @@ public class ActivityAddItem extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseUser user;
+    private Database database;
+
+    private Intent intent;
+    private Map<String, Object> item;
+
+    private String itemID;
+    private String userID;
 
     private ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
         new ActivityResultContracts.StartActivityForResult(),
@@ -55,24 +65,34 @@ public class ActivityAddItem extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         checkForUser();
-        Database database = Database.getInstance();
+        database = Database.getInstance();
 
         setContentView(R.layout.activity_add_item);
 
         findViewById(R.id.txt_retake).setOnClickListener((View view) -> takePicture());
 
-        findViewById(R.id.btn_save).setOnClickListener((View view) -> uploadItem());
 
-        /*database.downloadImage("a/image.png").addOnCompleteListener(uriTask -> {
-                try {
-                    ImageView imageView = findViewById(R.id.img_my_image);
-                    Picasso.get().load(uriTask.getResult().toString()).into(imageView);
-                } catch(Exception e) {
-                    Log.e("123 test", "onCreate: " + e.toString());
-                }
-        });*/
 
-        takePicture();
+        intent = getIntent();
+
+        if(intent.hasExtra("itemID")) {
+            itemID = intent.getStringExtra("itemID");
+
+            findViewById(R.id.btn_save).setOnClickListener((View view) -> updateItem());
+
+            database.downloadUserItem(userID, itemID)
+                    .addOnSuccessListener((DocumentSnapshot document) -> {
+                        item = document.getData();
+                        displayItem();
+                    })
+                    .addOnFailureListener((Exception e) -> {
+                        finish();
+                    });
+
+        } else {
+            findViewById(R.id.btn_save).setOnClickListener((View view) -> uploadItem());
+            takePicture();
+        }
     }
 
     private void checkForUser() {
@@ -80,7 +100,7 @@ public class ActivityAddItem extends AppCompatActivity {
         user = mAuth.getCurrentUser();
 
         if(user != null) {
-
+            userID = user.getUid();
         } else {
             finish();
             startActivity(new Intent(this, ActivityLogIn.class));
@@ -95,6 +115,42 @@ public class ActivityAddItem extends AppCompatActivity {
         } catch (ActivityNotFoundException e) {
 
         }
+    }
+
+    private void displayItem() {
+        String name         = item.get("name").toString();
+        String location     = item.get("location").toString();
+        String description  = item.get("description").toString();
+
+        ((EditText) findViewById(R.id.edt_name)).setText(name);
+        ((EditText) findViewById(R.id.edt_location)).setText(location);
+        ((EditText) findViewById(R.id.edt_description)).setText(description);
+
+        database.downloadImage(Database.findImageAddress(userID, itemID, Database.ImageType.ITEM))
+                .addOnSuccessListener((Uri imageUri) -> {
+                    ImageView imageView = findViewById(R.id.img_my_image);
+                    Picasso.get().load(imageUri).into(imageView);
+                })
+                .addOnFailureListener((Exception e) -> {
+                    Toast.makeText(this, "Could not load image", Toast.LENGTH_SHORT)
+                            .show();
+                });
+    }
+
+    private void updateItem() {
+        String name             = ((EditText) findViewById(R.id.edt_name)).getText().toString();
+        String location         = ((EditText) findViewById(R.id.edt_location)).getText().toString();
+        String description      = ((EditText) findViewById(R.id.edt_description)).getText().toString();
+
+        String oldName          = item.get("name").toString();
+        String oldLocation      = item.get("location").toString();
+        String oldDescription   = item.get("description").toString();
+
+        if(name != oldName) database.updateItem(userID, itemID,"name", name);
+        if(location != oldLocation) database.updateItem(userID, itemID,"location", location);
+        if(description != oldDescription) database.updateItem(userID, itemID,"description", description);
+
+        finish();
     }
 
     private void uploadItem() {
