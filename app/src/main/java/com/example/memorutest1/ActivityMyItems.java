@@ -3,6 +3,7 @@ package com.example.memorutest1;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -45,7 +46,7 @@ public class ActivityMyItems extends AppCompatActivity {
                     database.downloadImage(Database.findImageAddress(userID, itemID, Database.ImageType.ITEM))
                             .addOnCompleteListener(uriTask -> {
                                 ((LinearLayout) findViewById(R.id.layout_scroll))
-                                        .addView(getItemDisplay(item, uriTask));
+                                        .addView(getItemDisplay(item, uriTask, itemID));
                             });
                 }
             } else {
@@ -55,13 +56,23 @@ public class ActivityMyItems extends AppCompatActivity {
         });
     }
 
-    private View getItemDisplay(Map<String, Object> item, Task<Uri> task) {
+    private View getItemDisplay(Map<String, Object> item, Task<Uri> task, String itemID) {
         View layout = getLayoutInflater().inflate(R.layout.my_item, null);
 
         ImageView imageView = layout.findViewById(R.id.mini_image);
-        Picasso.get().load(task.getResult().toString()).into(imageView);
+        Picasso.get()
+                .load(task.getResult().toString())
+                .resize(160, 160)
+                .centerCrop()
+                .into(imageView);
 
         ((TextView) layout.findViewById(R.id.txt_name)).setText(item.get("name").toString());
+        ((TextView) layout.findViewById(R.id.txt_desc)).setText(item.get("description").toString());
+
+        layout.setOnClickListener((View view) -> {
+            startActivity(new Intent(this, ActivityViewItem.class)
+                    .putExtra("itemID", itemID));
+        });
 
         return layout;
     }
