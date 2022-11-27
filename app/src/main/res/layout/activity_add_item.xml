@@ -34,21 +34,13 @@
             android:layout_width="0dp"
             android:layout_height="0dp"/>
 
-        <Button
-            android:id="@+id/btn_save"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:text="save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
-        android:scaleType="fitXY"
         android:layout_marginTop="@dimen/spacing_large"
         android:id="@+id/img_my_image"
-        android:src="@drawable/snapchat"
+        android:src="@drawable/ic_baseline_image_24"
+        android:scaleType="fitXY"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -73,7 +65,7 @@
         app:layout_constraintEnd_toEndOf="@id/img_my_image"
         app:layout_constraintStart_toStartOf="@id/img_my_image"
         app:layout_constraintTop_toTopOf="@+id/txt_retake"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/img_my_receipt"
         android:layout_marginBottom="@dimen/spacing_large"
         android:layout_width="0dp"
         android:layout_height="wrap_content">
@@ -113,13 +105,44 @@
             android:id="@+id/edt_description"
             android:padding="@dimen/spacing_small"
             android:gravity="top"
-            android:minLines="@integer/text_field_lines"
-            android:maxLines="@integer/text_field_lines"
+            android:minLines="4"
+            android:maxLines="4"
             android:background="@color/text_background_gray"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Location of the item" />
-        
+
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/img_my_receipt"
+        android:layout_marginBottom="10dp"
+        android:scaleType="fitXY"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toStartOf="@id/img_my_image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/ic_baseline_image_24"
+        android:layout_marginTop="10dp"
+        android:layout_width="150px"
+        android:layout_height="150px"/>
+
+    <TextView
+        android:id="@+id/txt_add_receipt"
+        android:paddingTop="100px"
+        android:text="Add receipt"
+        android:layout_margin="10dp"
+        app:layout_constraintStart_toEndOf="@id/img_my_receipt"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintEnd_toEndOf="@id/img_my_image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

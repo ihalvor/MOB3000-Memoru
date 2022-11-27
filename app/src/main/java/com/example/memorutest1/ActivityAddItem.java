@@ -30,7 +30,10 @@ import java.util.Map;
 
 public class ActivityAddItem extends AppCompatActivity {
 
+    public static final String TAG = "ADD_ITEM";
+
     private Bitmap image;
+    private Bitmap receiptImage;
 
     private FirebaseAuth mAuth;
     private FirebaseUser user;
@@ -42,24 +45,27 @@ public class ActivityAddItem extends AppCompatActivity {
     private String itemID;
     private String userID;
 
-    private ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
-        new ActivityResultContracts.StartActivityForResult(),
-        (ActivityResult result) -> {
-            if(result.getResultCode() != RESULT_OK || result.getData() == null) return;
+    private ActivityResultLauncher<Intent> receiptImageLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            (ActivityResult result) -> {
+                if(result.getResultCode() != RESULT_OK || result.getData() == null) return;
 
-            Bundle bundle = result.getData().getExtras();
+                Bundle bundle = result.getData().getExtras();
 
-            image = (Bitmap)  bundle.get("data");
-            ((ImageView) findViewById(R.id.img_my_image)).setImageBitmap(image);
+                receiptImage = (Bitmap)  bundle.get("data");
+                ((ImageView) findViewById(R.id.img_my_receipt)).setImageBitmap(image);
+            });
 
-            Database.getInstance().uploadCompressedImage(
-                    image,
-                    "a/image.png",
-                    Bitmap.CompressFormat.PNG,
-                    100);
+    private ActivityResultLauncher<Intent> itemImageLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            (ActivityResult result) -> {
+                if(result.getResultCode() != RESULT_OK || result.getData() == null) return;
 
-        }
-    );
+                Bundle bundle = result.getData().getExtras();
+
+                image = (Bitmap)  bundle.get("data");
+                ((ImageView) findViewById(R.id.img_my_image)).setImageBitmap(image);
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +76,7 @@ public class ActivityAddItem extends AppCompatActivity {
         setContentView(R.layout.activity_add_item);
 
         findViewById(R.id.txt_retake).setOnClickListener((View view) -> takePicture());
-
+        findViewById(R.id.txt_add_receipt).setOnClickListener((View view) -> takeReceiptPicture());
 
 
         intent = getIntent();
@@ -107,13 +113,25 @@ public class ActivityAddItem extends AppCompatActivity {
         }
     }
 
+    private void takeReceiptPicture() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        try {
+            receiptImageLauncher.launch(intent);
+        } catch (ActivityNotFoundException e) {
+            String errorMsg = "Could not take receipt image";
+            Log.e(TAG, errorMsg);
+            Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void takePicture() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
         try {
-            activityResultLauncher.launch(intent);
+            itemImageLauncher.launch(intent);
         } catch (ActivityNotFoundException e) {
-
+            String errorMsg = "Could not take item image";
+            Log.e(TAG, errorMsg);
+            Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -130,6 +148,18 @@ public class ActivityAddItem extends AppCompatActivity {
                 .addOnSuccessListener((Uri imageUri) -> {
                     ImageView imageView = findViewById(R.id.img_my_image);
                     Picasso.get().load(imageUri).into(imageView);
+
+                    // receipt image
+                    database.downloadImage(Database
+                            .findImageAddress(userID, itemID, Database.ImageType.RECEIPT))
+                            .addOnSuccessListener((Uri receiptUri) -> {
+                                ImageView receiptView = findViewById(R.id.img_my_receipt);
+                                Picasso.get()
+                                        .load(receiptUri)
+                                        .resize(150, 150)
+                                        .centerCrop()
+                                        .into(receiptView);
+                            });
                 })
                 .addOnFailureListener((Exception e) -> {
                     Toast.makeText(this, "Could not load image", Toast.LENGTH_SHORT)
@@ -163,6 +193,7 @@ public class ActivityAddItem extends AppCompatActivity {
 
         database.uploadItem(name, location, description, userID)
                 .addOnSuccessListener(this, (DocumentReference reference) -> {
+                    // Upload item image
                     database.uploadCompressedImage(
                             image,
                             Database.findImageAddress(userID, reference.getId(), Database.ImageType.ITEM),
@@ -170,6 +201,25 @@ public class ActivityAddItem extends AppCompatActivity {
                             100)
                             .addOnSuccessListener(this, s -> {
                                 Toast.makeText(this, "Item uploaded", Toast.LENGTH_SHORT).show();
+
+                                // Upload receipt
+                                database.uploadCompressedImage(
+                                        receiptImage,
+                                        Database.findImageAddress(
+                                                userID,
+                                                reference.getId(),
+                                                Database.ImageType.RECEIPT),
+                                        Bitmap.CompressFormat.PNG,
+                                        100)
+                                        .addOnFailureListener((Exception e) -> {
+                                            Log.e(TAG, e.toString());
+
+                                            Toast.makeText(
+                                                    this,
+                                                    "Could not upload receipt",
+                                                    Toast.LENGTH_SHORT)
+                                                    .show();
+                                        });
                             });
                 })
                 .addOnFailureListener(this, a -> {
