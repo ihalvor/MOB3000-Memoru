@@ -13,6 +13,13 @@
         android:theme="@style/Theme.MemoruTest1"
         tools:targetApi="31">
         <activity
+            android:name=".ActivityViewReceipt"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ActivityMyGrid"
             android:exported="false">
             <meta-data
