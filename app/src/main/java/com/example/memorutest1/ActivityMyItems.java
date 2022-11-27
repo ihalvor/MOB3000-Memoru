@@ -5,6 +5,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,6 +34,17 @@ public class ActivityMyItems extends AppCompatActivity {
         setContentView(R.layout.activity_my_items);
         // TODO: log user out if not authorized
         user = FirebaseAuth.getInstance().getCurrentUser();
+
+        // Set navbar color
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            ((TextView) findViewById(R.id.txt_list)).setTextColor(getColor(R.color.button_color));
+        } else {
+            ((TextView) findViewById(R.id.txt_list)).setTextColor(0xFF5584AC);
+        }
+        ((TextView) findViewById(R.id.txt_grid)).setOnClickListener((View view) -> {
+            finish();
+            startActivity(new Intent(this, ActivityMyGrid.class));
+        });
 
         Database database = Database.getInstance();
         database.downloadUserItems(user.getUid()).addOnCompleteListener((Task<QuerySnapshot> task) -> {
