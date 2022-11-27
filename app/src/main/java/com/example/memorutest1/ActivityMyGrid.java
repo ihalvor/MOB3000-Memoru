@@ -91,8 +91,13 @@ public class ActivityMyGrid extends AppCompatActivity {
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             String itemID = itemIDs.get(i);
+            ImageView imageView;
 
-            ImageView imageView = new ImageView(getApplicationContext());
+            if(view == null) {
+                imageView = new ImageView(getApplicationContext());
+            } else {
+                imageView = (ImageView) view;
+            }
 
             // Go to the item view
             imageView.setOnClickListener((View view2) -> {
