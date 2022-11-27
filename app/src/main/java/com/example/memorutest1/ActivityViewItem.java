@@ -54,7 +54,7 @@ public class ActivityViewItem extends AppCompatActivity {
                                 database.downloadImage(Database.findImageAddress(
                                         userID, itemID, Database.ImageType.RECEIPT))
                                         .addOnSuccessListener((Uri receiptUri) -> {
-                                            displayReceipt(receiptUri);
+                                            displayReceipt(receiptUri, item.get("name").toString());
                                         });
                             })
                             .addOnFailureListener((Exception e) -> {
@@ -70,7 +70,7 @@ public class ActivityViewItem extends AppCompatActivity {
 
     }
 
-    private void displayReceipt(Uri receiptUri) {
+    private void displayReceipt(Uri receiptUri, String itemName) {
         ImageView imageView = findViewById(R.id.img_my_receipt);
         imageView.setVisibility(View.VISIBLE);
 
@@ -82,6 +82,15 @@ public class ActivityViewItem extends AppCompatActivity {
                 .resize(300, 300)
                 .centerCrop()
                 .into(imageView);
+
+        // View larger receipt
+        imageView.setOnClickListener((View view) -> {
+            Intent intent = new Intent(this, ActivityViewReceipt.class)
+                    .putExtra(ActivityViewReceipt.EXTRA_ITEM_NAME, itemName)
+                    .putExtra(ActivityViewReceipt.EXTRA_URI_KEY, receiptUri);
+
+            startActivity(intent);
+        });
     }
 
     private void displayItemData(Map<String, Object> item, Uri imageUri) {
