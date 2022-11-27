@@ -49,6 +49,13 @@ public class ActivityViewItem extends AppCompatActivity {
                             userID, itemID, Database.ImageType.ITEM))
                             .addOnSuccessListener((Uri imageUri) -> {
                                 displayItemData(item, imageUri);
+
+                                // Get receipt
+                                database.downloadImage(Database.findImageAddress(
+                                        userID, itemID, Database.ImageType.RECEIPT))
+                                        .addOnSuccessListener((Uri receiptUri) -> {
+                                            displayReceipt(receiptUri);
+                                        });
                             })
                             .addOnFailureListener((Exception e) -> {
                                 Toast.makeText(this,
@@ -61,6 +68,20 @@ public class ActivityViewItem extends AppCompatActivity {
                     Toast.makeText(this, "No item found", Toast.LENGTH_SHORT).show();
                 });
 
+    }
+
+    private void displayReceipt(Uri receiptUri) {
+        ImageView imageView = findViewById(R.id.img_my_receipt);
+        imageView.setVisibility(View.VISIBLE);
+
+        TextView label = findViewById(R.id.txt_receipt_label);
+        label.setVisibility(View.VISIBLE);
+
+        Picasso.get()
+                .load(receiptUri)
+                .resize(300, 300)
+                .centerCrop()
+                .into(imageView);
     }
 
     private void displayItemData(Map<String, Object> item, Uri imageUri) {
