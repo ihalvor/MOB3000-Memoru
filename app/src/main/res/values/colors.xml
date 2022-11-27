@@ -10,6 +10,7 @@
 
     <color name="button_color">#FF5584AC</color>
     <color name="background_gray">#FF252525</color>
+    <color name="background_gray_thin">#44252525</color>
     <color name="text_background_gray">#FF504B4B</color>
     <color name="washed_white">#90FFFFFF</color>
 </resources>
