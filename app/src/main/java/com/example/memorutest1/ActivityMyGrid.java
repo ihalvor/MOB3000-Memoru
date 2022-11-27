@@ -74,7 +74,7 @@ public class ActivityMyGrid extends AppCompatActivity {
     }
 
     public class GridViewAdapter extends BaseAdapter {
-        private ArrayList<String> itemIDs = new ArrayList<>();
+        private ArrayList<String> itemIDs;
 
         GridViewAdapter(ArrayList<String> itemIDs) { this.itemIDs = itemIDs; }
 
