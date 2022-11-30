@@ -54,10 +54,9 @@ public class ActivityAddItem extends AppCompatActivity {
             new ActivityResultContracts.StartActivityForResult(),
             (ActivityResult result) -> {
                 if(result.getResultCode() != RESULT_OK || result.getData() == null) return;
-
                 Bundle bundle = result.getData().getExtras();
 
-                receiptImage = (Bitmap)  bundle.get("data");
+                receiptImage = (Bitmap) bundle.get("data");
                 ((ImageView) findViewById(R.id.img_my_receipt)).setImageBitmap(image);
                 newReceiptImage = true;
             });
@@ -69,7 +68,7 @@ public class ActivityAddItem extends AppCompatActivity {
 
                 Bundle bundle = result.getData().getExtras();
 
-                image = (Bitmap)  bundle.get("data");
+                image = (Bitmap) bundle.get("data");
                 ((ImageView) findViewById(R.id.img_my_image)).setImageBitmap(image);
                 newItemImage = true;
             });

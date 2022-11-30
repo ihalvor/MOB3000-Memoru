@@ -10,5 +10,21 @@
     <dimen name="spacing_large">20dp</dimen>
     <string name="title_activity_maps">MapsActivity</string>
 
+    <!-- Status messages for users -->
+    <!-- uploads -->
+    <!-- fails -->
+    <string name="upload_item_image_failed">Failed to upload item image</string>
+    <string name="upload_receipt_image_failed">Failed to upload receipt</string>
+    <string name="upload_item_failed">Failed to upload item</string>
+
+    <!-- success -->
+    <string name="upload_item_image_success">Uploaded item image</string>
+    <string name="upload_receipt_image_success">Uploaded receipt</string>
+    <string name="upload_item_success">Uploaded item</string>
+
+    <!-- Accessing camera -->
+    <string name="capture_item_image_failed">Failed to take item image</string>
+    <string name="capture_receipt_image_failed">Failed to take receipt image</string>
+
 
 </resources>
