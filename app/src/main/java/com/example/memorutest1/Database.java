@@ -73,6 +73,7 @@ public class Database {
         item.put("location", location);
         item.put("description", description);
         item.put("userID", userID);
+        item.put("fav", false);
 
         return firestore.collection(userID).add(item);
     }
