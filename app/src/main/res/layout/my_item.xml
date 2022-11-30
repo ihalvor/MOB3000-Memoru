@@ -10,7 +10,7 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_marginRight="200px"
+        android:layout_marginRight="300px"
         android:padding="20px"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -43,6 +43,16 @@
 
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/img_star"
+        android:src="@drawable/ic_baseline_star_border_24"
+        app:layout_constraintEnd_toStartOf="@id/mini_image"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:padding="40px"
+        android:paddingEnd="0px"
+        android:layout_width="160px"
+        android:layout_height="160px"/>
 
     <ImageView
         android:layout_margin="20px"
