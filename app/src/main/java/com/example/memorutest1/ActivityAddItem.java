@@ -202,20 +202,21 @@ public class ActivityAddItem extends AppCompatActivity {
         if(description != oldDescription) database.updateItem(userID, itemID,"description", description);
 
         if(newItemImage) {
-            database.uploadCompressedImage(image,
-                    Database.findImageAddress(userID, itemID, Database.ImageType.ITEM),
-                    Bitmap.CompressFormat.PNG,
-                    100)
-                    .addOnSuccessListener(_p -> {
+            database.uploadCompressedImage(
+                image,
+                Database.findImageAddress(userID, itemID, Database.ImageType.ITEM),
+                Bitmap.CompressFormat.PNG,
+                100)
+                    .addOnSuccessListener(_result -> {
                         if(newReceiptImage) {
                             database.uploadCompressedImage(image,
-                                    Database.findImageAddress(userID, itemID, Database.ImageType.RECEIPT),
-                                    Bitmap.CompressFormat.PNG,
-                                    100)
+                                Database.findImageAddress(userID, itemID, Database.ImageType.RECEIPT),
+                                Bitmap.CompressFormat.PNG,
+                                100)
                                     .addOnFailureListener((Exception e) -> {
                                         Toast.makeText(this, "Failed to upload receipt", Toast.LENGTH_SHORT).show();
                                     })
-                                    .addOnSuccessListener(_a -> finish());
+                                    .addOnSuccessListener(_result2 -> finish());
                         } else {
                             finish();
                         }
@@ -224,16 +225,15 @@ public class ActivityAddItem extends AppCompatActivity {
                         Toast.makeText(this, "Failed to upload image", Toast.LENGTH_SHORT).show();
                     });
         } else if(newReceiptImage) {
-            database.uploadCompressedImage(image,
-                    Database.findImageAddress(userID, itemID, Database.ImageType.RECEIPT),
-                    Bitmap.CompressFormat.PNG,
-                    100)
+            database.uploadCompressedImage(
+                image,
+                Database.findImageAddress(userID, itemID, Database.ImageType.RECEIPT),
+                Bitmap.CompressFormat.PNG,
+                100)
                     .addOnFailureListener((Exception e) -> {
                         Toast.makeText(this, "Failed to upload receipt", Toast.LENGTH_SHORT).show();
                     })
-                    .addOnSuccessListener(_p -> {
-                       finish();
-                    });
+                    .addOnSuccessListener(_result -> finish());
         } else {
             finish();
         }
@@ -252,31 +252,31 @@ public class ActivityAddItem extends AppCompatActivity {
                     // Upload item image
                     if(newItemImage) {
                         database.uploadCompressedImage(
-                                        image,
-                                        Database.findImageAddress(userID, reference.getId(), Database.ImageType.ITEM),
-                                        Bitmap.CompressFormat.PNG,
-                                        100)
+                            image,
+                            Database.findImageAddress(userID, reference.getId(), Database.ImageType.ITEM),
+                            Bitmap.CompressFormat.PNG,
+                            100)
                                 .addOnSuccessListener(this, s -> {
                                     Toast.makeText(this, "Item uploaded", Toast.LENGTH_SHORT).show();
 
                                     // Upload receipt
                                     if(newReceiptImage) {
                                         database.uploadCompressedImage(
-                                                        receiptImage,
-                                                        Database.findImageAddress(
-                                                                userID,
-                                                                reference.getId(),
-                                                                Database.ImageType.RECEIPT),
-                                                        Bitmap.CompressFormat.PNG,
-                                                        100)
+                                            receiptImage,
+                                            Database.findImageAddress(
+                                                userID,
+                                                reference.getId(),
+                                                Database.ImageType.RECEIPT),
+                                            Bitmap.CompressFormat.PNG,
+                                            100)
                                                 .addOnFailureListener((Exception e) -> {
                                                     Log.e(TAG, e.toString());
 
                                                     Toast.makeText(
-                                                                    this,
-                                                                    "Could not upload receipt",
-                                                                    Toast.LENGTH_SHORT)
-                                                            .show();
+                                                  this,
+                                                    "Could not upload receipt",
+                                                        Toast.LENGTH_SHORT)
+                                                    .show();
                                                 })
                                                 .addOnSuccessListener(_s -> finish());
                                     } else {
