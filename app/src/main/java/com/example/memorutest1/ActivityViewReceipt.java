@@ -38,7 +38,7 @@ public class ActivityViewReceipt extends AppCompatActivity {
         ImageView imageView = findViewById(R.id.img_my_receipt);
         Picasso.get().load(uri).into(imageView);
 
-        ((TextView) findViewById(R.id.txt_name)).setText(name + "'s receipt");
+        getSupportActionBar().setTitle(name + "'s receipt");
     }
 
     @Override

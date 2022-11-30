@@ -111,7 +111,7 @@ public class ActivityViewItem extends AppCompatActivity {
         ImageView imageView = findViewById(R.id.img_my_image);
         Picasso.get().load(imageUri).into(imageView);
 
-        ((TextView) findViewById(R.id.txt_name)).setText(name);
+        getSupportActionBar().setTitle(name);
         ((TextView) findViewById(R.id.txt_location)).setText(location);
         ((TextView) findViewById(R.id.txt_desc)).setText(description);
     }

@@ -34,6 +34,8 @@ public class ActivityMyItems extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         getSupportActionBar().setTitle("My Items");
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         setContentView(R.layout.activity_my_items);
         // TODO: log user out if not authorized
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -71,15 +73,26 @@ public class ActivityMyItems extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private View getItemDisplay(Map<String, Object> item, Task<Uri> task, String itemID) {
         View layout = getLayoutInflater().inflate(R.layout.my_item, null);
 
         ImageView imageView = layout.findViewById(R.id.mini_image);
-        Picasso.get()
-                .load(task.getResult().toString())
-                .resize(160, 160)
-                .centerCrop()
-                .into(imageView);
+        if(task.isSuccessful()) {
+            Picasso.get()
+                    .load(task.getResult().toString())
+                    .resize(160, 160)
+                    .centerCrop()
+                    .into(imageView);
+        }
 
         ((TextView) layout.findViewById(R.id.txt_name)).setText(item.get("name").toString());
         ((TextView) layout.findViewById(R.id.txt_desc)).setText(item.get("description").toString());

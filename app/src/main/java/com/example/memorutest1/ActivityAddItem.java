@@ -28,6 +28,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 public class ActivityAddItem extends AppCompatActivity {
 
@@ -46,6 +47,9 @@ public class ActivityAddItem extends AppCompatActivity {
     private String itemID;
     private String userID;
 
+    private boolean newItemImage = false;
+    private boolean newReceiptImage = false;
+
     private ActivityResultLauncher<Intent> receiptImageLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             (ActivityResult result) -> {
@@ -55,6 +59,7 @@ public class ActivityAddItem extends AppCompatActivity {
 
                 receiptImage = (Bitmap)  bundle.get("data");
                 ((ImageView) findViewById(R.id.img_my_receipt)).setImageBitmap(image);
+                newReceiptImage = true;
             });
 
     private ActivityResultLauncher<Intent> itemImageLauncher = registerForActivityResult(
@@ -66,6 +71,7 @@ public class ActivityAddItem extends AppCompatActivity {
 
                 image = (Bitmap)  bundle.get("data");
                 ((ImageView) findViewById(R.id.img_my_image)).setImageBitmap(image);
+                newItemImage = true;
             });
 
     @Override
@@ -85,6 +91,7 @@ public class ActivityAddItem extends AppCompatActivity {
         intent = getIntent();
 
         if(intent.hasExtra("itemID")) {
+            getSupportActionBar().setTitle("Edit item");
             itemID = intent.getStringExtra("itemID");
 
             findViewById(R.id.btn_save).setOnClickListener((View view) -> updateItem());
@@ -92,6 +99,7 @@ public class ActivityAddItem extends AppCompatActivity {
             database.downloadUserItem(userID, itemID)
                     .addOnSuccessListener((DocumentSnapshot document) -> {
                         item = document.getData();
+                        getSupportActionBar().setTitle("Edit " + item.get("name"));
                         displayItem();
                     })
                     .addOnFailureListener((Exception e) -> {
@@ -99,6 +107,7 @@ public class ActivityAddItem extends AppCompatActivity {
                     });
 
         } else {
+            getSupportActionBar().setTitle("Add new item");
             findViewById(R.id.btn_save).setOnClickListener((View view) -> uploadItem());
             takePicture();
         }
@@ -192,7 +201,42 @@ public class ActivityAddItem extends AppCompatActivity {
         if(location != oldLocation) database.updateItem(userID, itemID,"location", location);
         if(description != oldDescription) database.updateItem(userID, itemID,"description", description);
 
-        finish();
+        if(newItemImage) {
+            database.uploadCompressedImage(image,
+                    Database.findImageAddress(userID, itemID, Database.ImageType.ITEM),
+                    Bitmap.CompressFormat.PNG,
+                    100)
+                    .addOnSuccessListener(_p -> {
+                        if(newReceiptImage) {
+                            database.uploadCompressedImage(image,
+                                    Database.findImageAddress(userID, itemID, Database.ImageType.RECEIPT),
+                                    Bitmap.CompressFormat.PNG,
+                                    100)
+                                    .addOnFailureListener((Exception e) -> {
+                                        Toast.makeText(this, "Failed to upload receipt", Toast.LENGTH_SHORT).show();
+                                    })
+                                    .addOnSuccessListener(_a -> finish());
+                        } else {
+                            finish();
+                        }
+                    })
+                    .addOnFailureListener((Exception e) -> {
+                        Toast.makeText(this, "Failed to upload image", Toast.LENGTH_SHORT).show();
+                    });
+        } else if(newReceiptImage) {
+            database.uploadCompressedImage(image,
+                    Database.findImageAddress(userID, itemID, Database.ImageType.RECEIPT),
+                    Bitmap.CompressFormat.PNG,
+                    100)
+                    .addOnFailureListener((Exception e) -> {
+                        Toast.makeText(this, "Failed to upload receipt", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnSuccessListener(_p -> {
+                       finish();
+                    });
+        } else {
+            finish();
+        }
     }
 
     private void uploadItem() {

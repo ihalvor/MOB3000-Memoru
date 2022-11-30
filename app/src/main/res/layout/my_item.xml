@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/button_color"
+    android:background="@color/background_gray"
     android:layout_width="match_parent"
     android:layout_height="200px"
     android:maxHeight="200px"
@@ -48,15 +48,15 @@
         android:id="@+id/mini_image"
         android:layout_marginEnd="@dimen/spacing_small"
         app:layout_constraintDimensionRatio="1:1"
-        android:src="@drawable/snapchat"
+        android:src="@drawable/ic_baseline_image_24"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"/>
+        android:layout_width="160px"
+        android:layout_height="160px"/>
 
     <View
         android:layout_marginHorizontal="20px"
-        android:background="@color/white"
+        android:background="@color/text_background_gray"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="match_parent"
         android:layout_height="4px"/>
