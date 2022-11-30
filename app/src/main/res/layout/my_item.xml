@@ -38,7 +38,8 @@
             android:maxLines="1"
             android:ellipsize="end"
             android:textStyle="italic"
-            android:fontFamily="sans-serif"/>
+            android:fontFamily="sans-serif"
+            android:textColor="@color/desc_color"/>
 
     </LinearLayout>
 
