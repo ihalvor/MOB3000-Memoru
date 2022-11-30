@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -69,7 +70,9 @@ public class ActivityAddItem extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getSupportActionBar().setTitle("Add Item");
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         checkForUser();
         database = Database.getInstance();
 
@@ -99,6 +102,15 @@ public class ActivityAddItem extends AppCompatActivity {
             findViewById(R.id.btn_save).setOnClickListener((View view) -> uploadItem());
             takePicture();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void checkForUser() {
@@ -194,33 +206,43 @@ public class ActivityAddItem extends AppCompatActivity {
         database.uploadItem(name, location, description, userID)
                 .addOnSuccessListener(this, (DocumentReference reference) -> {
                     // Upload item image
-                    database.uploadCompressedImage(
-                            image,
-                            Database.findImageAddress(userID, reference.getId(), Database.ImageType.ITEM),
-                            Bitmap.CompressFormat.PNG,
-                            100)
-                            .addOnSuccessListener(this, s -> {
-                                Toast.makeText(this, "Item uploaded", Toast.LENGTH_SHORT).show();
-
-                                // Upload receipt
-                                database.uploadCompressedImage(
-                                        receiptImage,
-                                        Database.findImageAddress(
-                                                userID,
-                                                reference.getId(),
-                                                Database.ImageType.RECEIPT),
+                    if(newItemImage) {
+                        database.uploadCompressedImage(
+                                        image,
+                                        Database.findImageAddress(userID, reference.getId(), Database.ImageType.ITEM),
                                         Bitmap.CompressFormat.PNG,
                                         100)
-                                        .addOnFailureListener((Exception e) -> {
-                                            Log.e(TAG, e.toString());
+                                .addOnSuccessListener(this, s -> {
+                                    Toast.makeText(this, "Item uploaded", Toast.LENGTH_SHORT).show();
 
-                                            Toast.makeText(
-                                                    this,
-                                                    "Could not upload receipt",
-                                                    Toast.LENGTH_SHORT)
-                                                    .show();
-                                        });
-                            });
+                                    // Upload receipt
+                                    if(newReceiptImage) {
+                                        database.uploadCompressedImage(
+                                                        receiptImage,
+                                                        Database.findImageAddress(
+                                                                userID,
+                                                                reference.getId(),
+                                                                Database.ImageType.RECEIPT),
+                                                        Bitmap.CompressFormat.PNG,
+                                                        100)
+                                                .addOnFailureListener((Exception e) -> {
+                                                    Log.e(TAG, e.toString());
+
+                                                    Toast.makeText(
+                                                                    this,
+                                                                    "Could not upload receipt",
+                                                                    Toast.LENGTH_SHORT)
+                                                            .show();
+                                                })
+                                                .addOnSuccessListener(_s -> finish());
+                                    } else {
+                                        finish();
+                                    }
+                                });
+                    } else {
+                        Toast.makeText(this, "Item uploaded", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
                 })
                 .addOnFailureListener(this, a -> {
                     Toast.makeText(this, "Upload failed", Toast.LENGTH_SHORT).show();
