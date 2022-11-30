@@ -88,7 +88,8 @@ public class Database {
 
     public Task<QuerySnapshot> downloadUserItems(String userID) {
         return firestore.collection(userID)
-                .orderBy("name", Query.Direction.DESCENDING)
+                .orderBy("fav", Query.Direction.DESCENDING)
+                .orderBy("name", Query.Direction.ASCENDING)
                 .get();
     }
 
@@ -99,7 +100,7 @@ public class Database {
     }
 
     public static String findImageAddress(String userID, String itemID, ImageType type) {
-        return userID + "/" 
+        return userID
                 + type.toString()
                 + itemID;
     }

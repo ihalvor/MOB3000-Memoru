@@ -71,6 +71,9 @@ public class ActivityMyItems extends AppCompatActivity {
                 Toast.makeText(this, "Could not load items", Toast.LENGTH_SHORT).show();
             }
 
+        })
+        .addOnFailureListener((Exception e) -> {
+            Log.e("MY_ITEMS", e.toString());
         });
     }
 
