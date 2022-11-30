@@ -61,11 +61,8 @@ public class ActivityMyItems extends AppCompatActivity {
                     String itemID = document.getId();
                     String userID = user.getUid();
 
-                    database.downloadImage(Database.findImageAddress(userID, itemID, Database.ImageType.ITEM))
-                            .addOnCompleteListener(uriTask -> {
-                                ((LinearLayout) findViewById(R.id.layout_scroll))
-                                        .addView(getItemDisplay(item, uriTask, itemID));
-                            });
+                    ((LinearLayout) findViewById(R.id.layout_scroll))
+                            .addView(getItemDisplay(item, userID, itemID));
                 }
             } else {
                 Toast.makeText(this, "Could not load items", Toast.LENGTH_SHORT).show();
@@ -86,7 +83,7 @@ public class ActivityMyItems extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private View getItemDisplay(Map<String, Object> item, Task<Uri> task, String itemID) {
+    private View getItemDisplay(Map<String, Object> item, String userID, String itemID) {
         boolean favourite;
         try {
             favourite = item.get("fav").toString() == "true";
@@ -102,14 +99,17 @@ public class ActivityMyItems extends AppCompatActivity {
                     : R.layout.my_item,
                 null);
 
+        // Download and display image if item has one
         ImageView imageView = layout.findViewById(R.id.mini_image);
-        if(task.isSuccessful()) {
-            Picasso.get()
-                    .load(task.getResult().toString())
-                    .resize(160, 160)
-                    .centerCrop()
-                    .into(imageView);
-        }
+        Database.getInstance()
+                .downloadImage(Database.findImageAddress(userID, itemID, Database.ImageType.ITEM))
+                .addOnSuccessListener((Uri uri) -> {
+                    Picasso.get()
+                            .load(uri)
+                            .resize(160, 160)
+                            .centerCrop()
+                            .into(imageView);
+                });
 
         ((TextView) layout.findViewById(R.id.txt_name)).setText(item.get("name").toString());
         ((TextView) layout.findViewById(R.id.txt_desc)).setText(item.get("description").toString());
