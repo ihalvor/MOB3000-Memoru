@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,8 +24,7 @@ public class ActivityViewReceipt extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_receipt);
-
-        findViewById(R.id.txt_back).setOnClickListener((View view) -> finish());
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
         String name = intent.getStringExtra(EXTRA_ITEM_NAME);
@@ -39,5 +39,14 @@ public class ActivityViewReceipt extends AppCompatActivity {
         Picasso.get().load(uri).into(imageView);
 
         ((TextView) findViewById(R.id.txt_name)).setText(name + "'s receipt");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

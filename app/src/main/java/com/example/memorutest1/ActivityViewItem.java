@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,11 +26,10 @@ public class ActivityViewItem extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_item);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         user = FirebaseAuth.getInstance().getCurrentUser();
         if(user == null) finish();
 
-        findViewById(R.id.txt_back).setOnClickListener((View view) -> finish());
 
         // Download and load item data
         Database database = Database.getInstance();
@@ -68,6 +68,15 @@ public class ActivityViewItem extends AppCompatActivity {
                     Toast.makeText(this, "No item found", Toast.LENGTH_SHORT).show();
                 });
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void displayReceipt(Uri receiptUri, String itemName) {

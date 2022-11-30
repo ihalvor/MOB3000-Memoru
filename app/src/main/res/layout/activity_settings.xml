@@ -8,34 +8,6 @@
     android:background="@color/background_gray"
     tools:context=".ActivitySettings">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:paddingTop="@dimen/spacing_small"
-        android:paddingHorizontal="@dimen/spacing_large"
-        android:id="@+id/top_bar"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:text="back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <ImageView
-            app:layout_constraintDimensionRatio="1:1"
-            android:src="@drawable/m"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.12"
-            android:layout_width="0dp"
-            android:layout_height="0dp"/>
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
     <LinearLayout
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
