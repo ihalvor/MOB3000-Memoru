@@ -81,6 +81,11 @@ public class Database {
         firestore.collection(userID).document(itemID).update(field, value);
     }
 
+    public void favItem(String userID, String itemID, boolean fav) {
+        // Changed
+        firestore.collection(userID).document(itemID).update("fav", fav);
+    }
+
     public Task<QuerySnapshot> downloadUserItems(String userID) {
         return firestore.collection(userID)
                 .orderBy("name", Query.Direction.DESCENDING)
