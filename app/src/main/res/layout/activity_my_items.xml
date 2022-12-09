@@ -8,7 +8,6 @@
     android:background="@color/background_gray"
     tools:context=".ActivityMyItems">
 
-
     <include layout="@layout/item_list_nav_bar"/>
     <SearchView
         android:id="@+id/search"
