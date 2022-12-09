@@ -10,25 +10,26 @@
 
 
     <include layout="@layout/item_list_nav_bar"/>
-
-    <ScrollView
-        android:orientation="vertical"
-        android:background="@color/text_background_gray"
+    <SearchView
+        android:id="@+id/search"
         app:layout_constraintTop_toBottomOf="@+id/layout_list_nav_bar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_marginRight="35dp"
+        android:queryHint="Search for item"
+        android:iconifiedByDefault="false"
+        android:layout_height="30dp"/>
+
 
         <!-- TODO: remove padding -->
-        <LinearLayout
+        <ListView
             android:id="@+id/layout_scroll"
             android:paddingBottom="50dp"
             android:orientation="vertical"
             android:background="@color/background_gray"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </LinearLayout>
-    </ScrollView>
+            android:layout_height="match_parent"
+            android:layout_marginTop="80dp">
+        </ListView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
