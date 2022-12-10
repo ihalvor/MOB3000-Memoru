@@ -13,6 +13,13 @@
         android:theme="@style/Theme.MemoruTest1"
         tools:targetApi="31">
         <activity
+            android:name=".ActivityFAQ"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ActivityViewReceipt"
             android:exported="false">
             <meta-data
@@ -74,6 +81,13 @@
         </activity>
         <activity
             android:name=".MainActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".ActivityLicense"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
