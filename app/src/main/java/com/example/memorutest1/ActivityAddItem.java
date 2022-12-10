@@ -57,7 +57,7 @@ public class ActivityAddItem extends AppCompatActivity {
                 Bundle bundle = result.getData().getExtras();
 
                 receiptImage = (Bitmap) bundle.get("data");
-                ((ImageView) findViewById(R.id.img_my_receipt)).setImageBitmap(image);
+                ((ImageView) findViewById(R.id.img_my_receipt)).setImageBitmap(receiptImage);
                 newReceiptImage = true;
             });
 
