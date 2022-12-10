@@ -123,7 +123,7 @@ public class ActivityLogIn extends AppCompatActivity {
                         .setServerClientId(getString(R.string.default_web_client_id))
                         .setFilterByAuthorizedAccounts(true)
                         .build())
-                .setAutoSelectEnabled(true)
+                .setAutoSelectEnabled(false)
                 .build();
 
         // Start tge sign in process if showOneTapUI is still enabled. If we create this
@@ -153,7 +153,7 @@ public class ActivityLogIn extends AppCompatActivity {
                                                 getString(R.string.default_web_client_id))
                                         .setFilterByAuthorizedAccounts(false)
                                         .build())
-                                .setAutoSelectEnabled(true)
+                                .setAutoSelectEnabled(false)
                                 .build();
 
                         oneTapClient.beginSignIn(signUpRequest)

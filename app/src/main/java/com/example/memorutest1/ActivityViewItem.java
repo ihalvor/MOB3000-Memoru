@@ -1,7 +1,15 @@
 package com.example.memorutest1;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityOptionsCompat;
 
+import android.app.Instrumentation;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,6 +29,17 @@ import java.util.Map;
 public class ActivityViewItem extends AppCompatActivity {
 
     private FirebaseUser user;
+    private Database database;
+    private String itemID;
+    private String userID;
+
+    private ActivityResultLauncher<Intent> editLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            (ActivityResult result) -> {
+                if(result.getResultCode() == RESULT_OK) {
+                    downloadItem();
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,31 +47,39 @@ public class ActivityViewItem extends AppCompatActivity {
         setContentView(R.layout.activity_view_item);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user == null) finish();
 
+        if(user == null) {
+            setResult(RESULT_CANCELED);
+            finish();
+        }
 
-        // Download and load item data
-        Database database = Database.getInstance();
-        String itemID = getIntent().getStringExtra("itemID");
-        String userID = user.getUid();
+        database = Database.getInstance();
+        itemID = getIntent().getStringExtra("itemID");
+        userID = user.getUid();
 
         findViewById(R.id.btn_edit).setOnClickListener((View view) -> {
-            startActivity(new Intent(this, ActivityAddItem.class)
-                    .putExtra("itemID", itemID));
+            Intent editIntent = new Intent(this, ActivityAddItem.class)
+                    .putExtra("itemID", itemID);
+            editLauncher.launch(editIntent);
         });
+
+        downloadItem();
+    }
+
+    private void downloadItem() {
 
         database.downloadUserItem(userID, itemID)
                 .addOnSuccessListener((DocumentSnapshot snapshot) -> {
                     Map<String, Object> item = snapshot.getData();
 
                     database.downloadImage(Database.findImageAddress(
-                            userID, itemID, Database.ImageType.ITEM))
+                                    userID, itemID, Database.ImageType.ITEM))
                             .addOnSuccessListener((Uri imageUri) -> {
                                 displayItemData(item, imageUri);
 
                                 // Get receipt
                                 database.downloadImage(Database.findImageAddress(
-                                        userID, itemID, Database.ImageType.RECEIPT))
+                                                userID, itemID, Database.ImageType.RECEIPT))
                                         .addOnSuccessListener((Uri receiptUri) -> {
                                             displayReceipt(receiptUri, item.get("name").toString());
                                         });
@@ -67,12 +94,19 @@ public class ActivityViewItem extends AppCompatActivity {
                 .addOnFailureListener((Exception e) -> {
                     Toast.makeText(this, "No item found", Toast.LENGTH_SHORT).show();
                 });
-
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home) {
+
+            Intent intent = getIntent();
+            boolean edited = false;
+            if(intent.hasExtra("edit")) {
+                edited = intent.getBooleanExtra("edit", false);
+            }
+
+            setResult(RESULT_OK, new Intent().putExtra("edit", edited));
             finish();
             return true;
         }

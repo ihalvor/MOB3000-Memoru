@@ -26,5 +26,13 @@
     <string name="capture_item_image_failed">Failed to take item image</string>
     <string name="capture_receipt_image_failed">Failed to take receipt image</string>
 
+    <!-- license -->
+    <string name="bsd_license">Copyright (c) 2022 Eirik Smørås, Henrik Holstad Hauge, Halvor Asbjørnhus Skøien. All rights reserved.\n\nRedistribution and use in source and binary forms are permitted provided that the above copyright noticeand this paragraph are duplicated in all such forms and that any documentation, advertising materials,and other materials related to such distribution and use acknowledge that the software was developedby the copyright holders. The name of the copyright holders may not be used to endorse or promote productsderived from this software without specific prior written permission.\nTHIS SOFTWARE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES,INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.</string>
+
+    <!-- FAQ -->
+    <string name="FAQ_1">Q: Can I upload a receipt for an item without one?\n\nA: Yes, find your item in the list, tap it, then press edit item and you will find the option in the lower left corner</string>
+    <string name="FAQ_2">Q: How can I get in touch with the developers?\n\nA: You can send us an email; appmemoru@gmail.com</string>
+    <string name="FAQ_3">Q: I uploaded an item with the wrong name, can I change it?\n\nA: Yes, simply find your item in the list, and tap edit item</string>
+    <string name="FAQ_4">Q: How do I add an item to my favorites?\n\nA: Tap the star next to the item in the item list, if it is yellow it is one of your favorite items and will be displayed before the non-favorite</string>
 
 </resources>

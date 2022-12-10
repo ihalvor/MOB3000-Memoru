@@ -102,6 +102,7 @@ public class ActivityAddItem extends AppCompatActivity {
                         displayItem();
                     })
                     .addOnFailureListener((Exception e) -> {
+                        setResult(RESULT_CANCELED, new Intent());
                         finish();
                     });
 
@@ -215,9 +216,9 @@ public class ActivityAddItem extends AppCompatActivity {
                                     .addOnFailureListener((Exception e) -> {
                                         Toast.makeText(this, "Failed to upload receipt", Toast.LENGTH_SHORT).show();
                                     })
-                                    .addOnSuccessListener(_result2 -> finish());
+                                    .addOnSuccessListener(_result2 -> finishUpdatingItem());
                         } else {
-                            finish();
+                            finishUpdatingItem();
                         }
                     })
                     .addOnFailureListener((Exception e) -> {
@@ -232,10 +233,15 @@ public class ActivityAddItem extends AppCompatActivity {
                     .addOnFailureListener((Exception e) -> {
                         Toast.makeText(this, "Failed to upload receipt", Toast.LENGTH_SHORT).show();
                     })
-                    .addOnSuccessListener(_result -> finish());
+                    .addOnSuccessListener(_result -> finishUpdatingItem());
         } else {
-            finish();
+            finishUpdatingItem();
         }
+    }
+
+    private void finishUpdatingItem() {
+        setResult(RESULT_OK, new Intent().putExtra("edit", true));
+        finish();
     }
 
     private void uploadItem() {
