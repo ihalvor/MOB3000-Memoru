@@ -48,6 +48,8 @@ public class ActivityViewItem extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         user = FirebaseAuth.getInstance().getCurrentUser();
 
+        
+
         if(user == null) {
             setResult(RESULT_CANCELED);
             finish();
@@ -127,13 +129,16 @@ public class ActivityViewItem extends AppCompatActivity {
                 .into(imageView);
 
         // View larger receipt
-        imageView.setOnClickListener((View view) -> {
-            Intent intent = new Intent(this, ActivityViewReceipt.class)
-                    .putExtra(ActivityViewReceipt.EXTRA_ITEM_NAME, itemName)
-                    .putExtra(ActivityViewReceipt.EXTRA_URI_KEY, receiptUri);
+        imageView.setOnClickListener((View view) -> inspectReceipt(receiptUri, itemName));
+        label.setOnClickListener((View view) -> inspectReceipt(receiptUri, itemName));
+    }
+    
+    private void inspectReceipt(Uri receiptUri, String itemName) {
+        Intent intent = new Intent(this, ActivityViewReceipt.class)
+                .putExtra(ActivityViewReceipt.EXTRA_ITEM_NAME, itemName)
+                .putExtra(ActivityViewReceipt.EXTRA_URI_KEY, receiptUri);
 
-            startActivity(intent);
-        });
+        startActivity(intent);
     }
 
     private void displayItemData(Map<String, Object> item, Uri imageUri) {

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_gray"
+    tools:context=".ActivityViewItem">
+
+    <ImageView
+        android:layout_marginHorizontal="10dp"
+        android:scaleType="fitXY"
+        android:layout_marginTop="@dimen/spacing_large"
+        android:id="@+id/img_my_image"
+        android:src="@drawable/ic_baseline_image_24"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHeight_percent="0.8"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
+
+    <TextView
+        app:layout_constraintStart_toStartOf="@id/img_my_image"
+        app:layout_constraintTop_toBottomOf="@id/img_my_image"
+        android:id="@+id/txt_location"
+        android:scrollHorizontally="true"
+        android:maxLines="1"
+        android:drawableLeft="@drawable/ic_baseline_location_on_24"
+        android:text="my location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+    <LinearLayout
+        app:layout_constraintHeight_percent="0.8"
+        app:layout_constraintWidth_percent="0.5"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="@id/img_my_image"
+        app:layout_constraintStart_toEndOf="@id/img_my_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp">
+
+        <TextView
+            android:layout_marginHorizontal="40dp"
+            android:id="@+id/txt_desc_label"
+            app:layout_constraintTop_toBottomOf="@id/scroll_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Description"/>
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:background="@color/text_background_gray"
+            android:id="@+id/txt_desc"
+            android:minLines="7"
+            android:layout_marginHorizontal="40dp"
+            app:layout_constraintTop_toBottomOf="@id/txt_desc_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+
+
+    <!-- Hidden when there is no receipt -->
+    <TextView
+        android:visibility="visible"
+        android:id="@+id/txt_receipt_label"
+        app:layout_constraintBottom_toTopOf="@id/img_my_receipt"
+        app:layout_constraintStart_toStartOf="@id/img_my_receipt"
+        android:text="see receipt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <!-- Hidden when there is no receipt -->
+    <ImageView
+        android:layout_marginBottom="20dp"
+        android:visibility="visible"
+        android:id="@+id/img_my_receipt"
+        android:src="@drawable/ic_baseline_image_24"
+        app:layout_constraintBottom_toTopOf="@id/btn_edit"
+        app:layout_constraintEnd_toEndOf="@id/btn_edit"
+        android:layout_width="300px"
+        android:layout_height="300px"/>
+
+    <Button
+        android:id="@+id/btn_edit"
+        android:text="edit item"
+        android:layout_margin="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
