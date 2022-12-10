@@ -27,5 +27,10 @@
 
         <!-- Line under input -->
         <item name="colorControlNormal">@color/white</item>
+
+    </style>
+
+    <style name="del_button" parent="Theme.MemoruTest1">
+        <item name="colorPrimary">@color/delete_red</item>
     </style>
 </resources>

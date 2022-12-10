@@ -106,6 +106,11 @@ public class Database {
                 + itemID;
     }
 
+    public void deleteItem(String userID, String itemID) {
+        firestore.collection(userID).document(itemID).delete();
+        storageReference.child(userID + "/images/" + itemID).delete();
+        storageReference.child(userID + "/receipts/" + itemID).delete();
+    }
 
 
 }

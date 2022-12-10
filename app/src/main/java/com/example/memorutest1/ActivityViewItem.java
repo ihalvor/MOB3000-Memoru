@@ -6,6 +6,7 @@ import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityOptionsCompat;
 
@@ -48,8 +49,6 @@ public class ActivityViewItem extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        
-
         if(user == null) {
             setResult(RESULT_CANCELED);
             finish();
@@ -66,6 +65,19 @@ public class ActivityViewItem extends AppCompatActivity {
         });
 
         downloadItem();
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setMessage("Are you sure you want to delete the item?")
+                .setPositiveButton("Yes", (dialogInterface, i) -> {
+                    database.deleteItem(userID, itemID);
+                    setResult(RESULT_OK, new Intent().putExtra("edit", true));
+                    finish();
+                })
+                .setNegativeButton("No", (dialogInterface, i) -> {});
+
+        findViewById(R.id.btn_delete).setOnClickListener((View view) -> {
+            dialogBuilder.show();
+        });
     }
 
     private void downloadItem() {

@@ -57,7 +57,7 @@ public class ActivityMyItems extends AppCompatActivity {
             new ActivityResultContracts.StartActivityForResult(),
             (ActivityResult result) -> {
                 if(result.getResultCode() == RESULT_OK) {
-                    Intent intent = getIntent();
+                    Intent intent = result.getData();
 
                     boolean edited = false;
                     if(intent.hasExtra("edit")) {

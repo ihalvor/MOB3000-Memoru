@@ -86,11 +86,20 @@
         android:layout_height="300px"/>
 
     <Button
-        android:id="@+id/btn_edit"
-        android:text="edit item"
+        android:theme="@style/del_button"
         android:layout_margin="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="delete item"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/btn_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btn_edit"
+        android:text="  edit  item  "
+        app:layout_constraintStart_toStartOf="@id/btn_delete"
+        app:layout_constraintBottom_toTopOf="@id/btn_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
