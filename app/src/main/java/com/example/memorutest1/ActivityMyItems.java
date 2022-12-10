@@ -1,5 +1,8 @@
 package com.example.memorutest1;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -44,8 +47,25 @@ public class ActivityMyItems extends AppCompatActivity {
     private ArrayList<MyItem> myItems = new ArrayList<>();
     private ArrayList<MyItem> filteredItems = new ArrayList<>();
 
+    private Database database;
+
     private ItemAdapter itemAdapter = new ItemAdapter(myItems, filteredItems);
     private ListView listView;
+
+
+    private ActivityResultLauncher<Intent> viewItemLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            (ActivityResult result) -> {
+                if(result.getResultCode() == RESULT_OK) {
+                    Intent intent = getIntent();
+
+                    boolean edited = false;
+                    if(intent.hasExtra("edit")) {
+                        edited = intent.getBooleanExtra("edit", false);
+                    }
+                    if(edited) downloadItems();
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,35 +88,10 @@ public class ActivityMyItems extends AppCompatActivity {
             startActivity(new Intent(this, ActivityMyGrid.class));
         });
 
-        Database database = Database.getInstance();
-        database.downloadUserItems(user.getUid()).addOnCompleteListener((Task<QuerySnapshot> task) -> {
-            if (task.isSuccessful()) {
-
-                listView = findViewById(R.id.layout_scroll);
-                listView.setAdapter(itemAdapter);
-
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    Map<String, Object> item = document.getData();
-
-                    String itemID = document.getId();
-                    String userID = user.getUid();
-
-                    MyItem myItem = new MyItem(item, itemID, userID, null, null);
-
-                    filteredItems.add(myItem);
-                    myItems.add(myItem);
-                }
-            } else {
-                Toast.makeText(this, "Could not load items", Toast.LENGTH_SHORT).show();
-            }
-
-        })
-        .addOnFailureListener((Exception e) -> {
-            Log.e("MY_ITEMS", e.toString());
-        });
+        database = Database.getInstance();
+        downloadItems();
 
         SearchView search = findViewById(R.id.search);
-
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -112,7 +107,36 @@ public class ActivityMyItems extends AppCompatActivity {
         });
 
     }
+    private void downloadItems() {
+        filteredItems.clear();
+        myItems.clear();
 
+        database.downloadUserItems(user.getUid()).addOnCompleteListener((Task<QuerySnapshot> task) -> {
+                    if (task.isSuccessful()) {
+
+                        listView = findViewById(R.id.layout_scroll);
+                        listView.setAdapter(itemAdapter);
+
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Map<String, Object> item = document.getData();
+
+                            String itemID = document.getId();
+                            String userID = user.getUid();
+
+                            MyItem myItem = new MyItem(item, itemID, userID, null, null);
+
+                            filteredItems.add(myItem);
+                            myItems.add(myItem);
+                        }
+                    } else {
+                        Toast.makeText(this, "Could not load items", Toast.LENGTH_SHORT).show();
+                    }
+
+                })
+                .addOnFailureListener((Exception e) -> {
+                    Log.e("MY_ITEMS", e.toString());
+                });
+    }
 
     public class ItemAdapter extends BaseAdapter implements Filterable {
         @Override
@@ -202,8 +226,14 @@ public class ActivityMyItems extends AppCompatActivity {
         // we therefor have two different versions of my_item
         View layout;
 
-        if(view != null) {
+        if(view != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             layout = view;
+
+            ((ImageView) layout.findViewById(R.id.img_star)).setImageIcon(
+                    Icon.createWithResource(getApplicationContext(),
+                            favourite? R.drawable.ic_baseline_star_24 : R.drawable.ic_baseline_star_border_24)
+            );
+
         } else {
             layout = getLayoutInflater().inflate(
                     favourite
@@ -252,8 +282,7 @@ public class ActivityMyItems extends AppCompatActivity {
         });
 
         layout.setOnClickListener((View innerView) -> {
-
-            startActivity(new Intent(this, ActivityViewItem.class)
+            viewItemLauncher.launch(new Intent(this, ActivityViewItem.class)
                     .putExtra("itemID", itemID));
         });
 
