@@ -226,7 +226,7 @@ public class ActivityAddItem extends AppCompatActivity {
                     });
         } else if(newReceiptImage) {
             database.uploadCompressedImage(
-                image,
+                receiptImage,
                 Database.findImageAddress(userID, itemID, Database.ImageType.RECEIPT),
                 Bitmap.CompressFormat.PNG,
                 100)
