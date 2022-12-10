@@ -34,10 +34,13 @@ public class ActivityViewItem extends AppCompatActivity {
     private String itemID;
     private String userID;
 
+    private boolean isItemEdited = false;
+
     private ActivityResultLauncher<Intent> editLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             (ActivityResult result) -> {
                 if(result.getResultCode() == RESULT_OK) {
+                    isItemEdited = true;
                     downloadItem();
                 }
             });
@@ -113,14 +116,7 @@ public class ActivityViewItem extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home) {
-
-            Intent intent = getIntent();
-            boolean edited = false;
-            if(intent.hasExtra("edit")) {
-                edited = intent.getBooleanExtra("edit", false);
-            }
-
-            setResult(RESULT_OK, new Intent().putExtra("edit", edited));
+            setResult(RESULT_OK, new Intent().putExtra("edit", isItemEdited));
             finish();
             return true;
         }

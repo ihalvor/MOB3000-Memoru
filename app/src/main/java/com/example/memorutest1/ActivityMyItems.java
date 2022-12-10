@@ -74,8 +74,9 @@ public class ActivityMyItems extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setContentView(R.layout.activity_my_items);
-        // TODO: log user out if not authorized
+
         user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user == null) finish();
 
         // Set navbar color
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
