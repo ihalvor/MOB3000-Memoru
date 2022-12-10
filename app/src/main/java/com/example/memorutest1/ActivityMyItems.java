@@ -226,12 +226,14 @@ public class ActivityMyItems extends AppCompatActivity {
         // we therefor have two different versions of my_item
         View layout;
 
+        // We can recycle the view for newer API levels.
         if(view != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             layout = view;
 
             ((ImageView) layout.findViewById(R.id.img_star)).setImageIcon(
-                    Icon.createWithResource(getApplicationContext(),
-                            favourite? R.drawable.ic_baseline_star_24 : R.drawable.ic_baseline_star_border_24)
+                    Icon.createWithResource(getApplicationContext(), favourite
+                                    ? R.drawable.ic_baseline_star_24
+                                    : R.drawable.ic_baseline_star_border_24)
             );
 
         } else {

@@ -211,6 +211,7 @@ public class ActivityLogIn extends AppCompatActivity {
 
         gSignInClient = GoogleSignIn.getClient(this, gSignInOptions);
         googleSignInLauncher.launch(gSignInClient.getSignInIntent());
+
     }
 
     private void showSignInButton() {

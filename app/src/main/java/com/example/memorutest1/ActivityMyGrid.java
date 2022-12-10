@@ -1,5 +1,8 @@
 package com.example.memorutest1;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,6 +37,15 @@ public class ActivityMyGrid extends AppCompatActivity {
 
     private int imageWidth;
 
+    private ActivityResultLauncher<Intent> viewItemLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            (ActivityResult result) -> {
+                if(result.getResultCode() == RESULT_OK) {
+                    finish();
+                    startActivity(new Intent(this, ActivityMyGrid.class));
+                }
+            });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getSupportActionBar().setTitle("My Items");
@@ -63,6 +75,10 @@ public class ActivityMyGrid extends AppCompatActivity {
         imageWidth = displayMetrics.widthPixels / 3;
 
         // Load items
+        downloadItems();
+    }
+
+    private void downloadItems() {
         Database.getInstance().downloadUserItems(userID)
                 .addOnSuccessListener((QuerySnapshot query) -> {
                     ArrayList<String> itemIDs = new ArrayList<>();
@@ -72,8 +88,8 @@ public class ActivityMyGrid extends AppCompatActivity {
 
                     GridViewAdapter adapter = new GridViewAdapter(itemIDs);
                     gridView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
                 });
-
     }
 
     @Override
@@ -115,7 +131,7 @@ public class ActivityMyGrid extends AppCompatActivity {
             imageView.setOnClickListener((View view2) -> {
                 Intent intent = new Intent(getApplicationContext(), ActivityViewItem.class);
                 intent.putExtra("itemID", itemID);
-                startActivity(intent);
+                viewItemLauncher.launch(intent);
             });
 
             // Load image
@@ -124,7 +140,6 @@ public class ActivityMyGrid extends AppCompatActivity {
                     .addOnSuccessListener((Uri uri) -> {
                         Picasso.get().load(uri).resize(imageWidth, imageWidth).into(imageView);
                     });
-
             return imageView;
         }
     }
