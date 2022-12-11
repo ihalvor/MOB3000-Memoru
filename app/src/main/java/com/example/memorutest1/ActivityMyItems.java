@@ -115,7 +115,7 @@ public class ActivityMyItems extends AppCompatActivity {
     private void downloadItems() {
         filteredItems.clear();
         myItems.clear();
-
+        // Downloading users items
         database.downloadUserItems(user.getUid()).addOnCompleteListener((Task<QuerySnapshot> task) -> {
                     if (task.isSuccessful()) {
 

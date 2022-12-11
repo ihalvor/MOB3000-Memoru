@@ -79,6 +79,7 @@ public class ActivityAddItem extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         getSupportActionBar().setTitle("Add Item");
         super.onCreate(savedInstanceState);
+        // enabling the back button in the ActionBar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         checkForUser();
         database = Database.getInstance();
@@ -90,16 +91,17 @@ public class ActivityAddItem extends AppCompatActivity {
 
 
         intent = getIntent();
-
+        // If the item is being edited
         if(intent.hasExtra("itemID")) {
             getSupportActionBar().setTitle("Edit item");
             itemID = intent.getStringExtra("itemID");
 
             findViewById(R.id.btn_save).setOnClickListener((View view) -> updateItem());
-
+            // Downloading the item and displaying it
             database.downloadUserItem(userID, itemID)
                     .addOnSuccessListener((DocumentSnapshot document) -> {
                         item = document.getData();
+                        // Set title of ActionBar to name of the item
                         getSupportActionBar().setTitle("Edit " + item.get("name"));
                         displayItem();
                     })
@@ -107,7 +109,7 @@ public class ActivityAddItem extends AppCompatActivity {
                         setResult(RESULT_CANCELED, new Intent());
                         finish();
                     });
-
+        // If the item is new and being added
         } else {
             getSupportActionBar().setTitle("Add new item");
             findViewById(R.id.btn_save).setOnClickListener((View view) -> uploadItem());
@@ -131,7 +133,7 @@ public class ActivityAddItem extends AppCompatActivity {
     private void checkForUser() {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
-
+        // Checks if a user is logged in, if not finish the activity
         if(user != null) {
             userID = user.getUid();
         } else {
@@ -145,6 +147,7 @@ public class ActivityAddItem extends AppCompatActivity {
      */
     private void takeReceiptPicture() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Launching camera
         try {
             receiptImageLauncher.launch(intent);
         } catch (ActivityNotFoundException e) {
@@ -159,6 +162,7 @@ public class ActivityAddItem extends AppCompatActivity {
      */
     private void takePicture() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Launching camera
         try {
             itemImageLauncher.launch(intent);
         } catch (ActivityNotFoundException e) {
@@ -172,6 +176,7 @@ public class ActivityAddItem extends AppCompatActivity {
      * Display the item. Used if we are editing it
      */
     private void displayItem() {
+        // Get information about the item and displays it
         String name         = item.get("name").toString();
         String location     = item.get("location").toString();
         String description  = item.get("description").toString();
@@ -180,12 +185,13 @@ public class ActivityAddItem extends AppCompatActivity {
         ((EditText) findViewById(R.id.edt_location)).setText(location);
         ((EditText) findViewById(R.id.edt_description)).setText(description);
 
+        // Downloading item image
         database.downloadImage(Database.findImageAddress(userID, itemID, Database.ImageType.ITEM))
                 .addOnSuccessListener((Uri imageUri) -> {
                     ImageView imageView = findViewById(R.id.img_my_image);
                     Picasso.get().load(imageUri).into(imageView);
 
-                    // receipt image
+                    // Downloading receipt image
                     database.downloadImage(Database
                             .findImageAddress(userID, itemID, Database.ImageType.RECEIPT))
                             .addOnSuccessListener((Uri receiptUri) -> {
@@ -207,18 +213,22 @@ public class ActivityAddItem extends AppCompatActivity {
      * Upload changes to the item to the database and storage
      */
     private void updateItem() {
+        // Get new information about the item
         String name             = ((EditText) findViewById(R.id.edt_name)).getText().toString();
         String location         = ((EditText) findViewById(R.id.edt_location)).getText().toString();
         String description      = ((EditText) findViewById(R.id.edt_description)).getText().toString();
 
+        // Get old information about the item
         String oldName          = item.get("name").toString();
         String oldLocation      = item.get("location").toString();
         String oldDescription   = item.get("description").toString();
 
+        // If the new information is different from the old, update item
         if(name != oldName) database.updateItem(userID, itemID,"name", name);
         if(location != oldLocation) database.updateItem(userID, itemID,"location", location);
         if(description != oldDescription) database.updateItem(userID, itemID,"description", description);
 
+        // Upload new photo
         if(newItemImage) {
             database.uploadCompressedImage(
                 image,
@@ -242,6 +252,8 @@ public class ActivityAddItem extends AppCompatActivity {
                     .addOnFailureListener((Exception e) -> {
                         Toast.makeText(this, "Failed to upload image", Toast.LENGTH_SHORT).show();
                     });
+
+            // Upload new receipt
         } else if(newReceiptImage) {
             database.uploadCompressedImage(
                 receiptImage,
@@ -270,13 +282,14 @@ public class ActivityAddItem extends AppCompatActivity {
      * Upload an item to the database, and the images to the cloud storage
      */
     private void uploadItem() {
+        // Get information about new item
         String name = ((EditText) findViewById(R.id.edt_name)).getText().toString();
         String location = ((EditText) findViewById(R.id.edt_location)).getText().toString();
         String description = ((EditText) findViewById(R.id.edt_description)).getText().toString();
         String userID = user.getUid();
 
         Database database = Database.getInstance();
-
+        // Upload Item to database
         database.uploadItem(name, location, description, userID)
                 .addOnSuccessListener(this, (DocumentReference reference) -> {
                     // Upload item image

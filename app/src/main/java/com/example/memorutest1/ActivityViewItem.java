@@ -89,11 +89,11 @@ public class ActivityViewItem extends AppCompatActivity {
      * Download and display the selected item
      */
     private void downloadItem() {
-
+        // Downloading information about item
         database.downloadUserItem(userID, itemID)
                 .addOnSuccessListener((DocumentSnapshot snapshot) -> {
                     Map<String, Object> item = snapshot.getData();
-
+                    // Downloading photo of item
                     database.downloadImage(Database.findImageAddress(
                                     userID, itemID, Database.ImageType.ITEM))
                             .addOnSuccessListener((Uri imageUri) -> {
@@ -165,7 +165,7 @@ public class ActivityViewItem extends AppCompatActivity {
      * @param imageUri the uri for the item's image
      */
     private void displayItemData(Map<String, Object> item, Uri imageUri) {
-
+        // Get information about the selected item
         String name         = item.get("name").toString();
         String location     = item.get("location").toString();
         String description  = item.get("description").toString();
