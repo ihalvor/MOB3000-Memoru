@@ -63,7 +63,12 @@ public class ActivityAddItem extends AppCompatActivity {
     private ActivityResultLauncher<Intent> itemImageLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             (ActivityResult result) -> {
-                if(result.getResultCode() != RESULT_OK || result.getData() == null) return;
+                if(result.getResultCode() != RESULT_OK || result.getData() == null) {
+                    Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(this, MainActivity.class));
+                    finish();
+                    return;
+                }
 
                 Bundle bundle = result.getData().getExtras();
 
