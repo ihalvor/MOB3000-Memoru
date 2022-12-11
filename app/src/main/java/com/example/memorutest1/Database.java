@@ -1,7 +1,5 @@
 package com.example.memorutest1;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 
 import android.net.Uri;
@@ -9,9 +7,6 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
