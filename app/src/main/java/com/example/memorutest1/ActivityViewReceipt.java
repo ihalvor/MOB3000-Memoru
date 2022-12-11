@@ -41,6 +41,7 @@ public class ActivityViewReceipt extends AppCompatActivity {
         getSupportActionBar().setTitle(name + "'s receipt");
     }
 
+    // Enable back button in action bar
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home) {

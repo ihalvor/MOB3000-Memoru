@@ -52,7 +52,8 @@ public class ActivityMyItems extends AppCompatActivity {
     private ItemAdapter itemAdapter = new ItemAdapter(myItems, filteredItems);
     private ListView listView;
 
-
+    // Use an activityResultLauncher to launch the item, the result is wether the item was changed
+    // or not.
     private ActivityResultLauncher<Intent> viewItemLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             (ActivityResult result) -> {
@@ -75,6 +76,7 @@ public class ActivityMyItems extends AppCompatActivity {
 
         setContentView(R.layout.activity_my_items);
 
+        // Exit if not signed in
         user = FirebaseAuth.getInstance().getCurrentUser();
         if(user == null) finish();
 
@@ -92,13 +94,11 @@ public class ActivityMyItems extends AppCompatActivity {
         database = Database.getInstance();
         downloadItems();
 
+        // Filter items as we type our search string
         SearchView search = findViewById(R.id.search);
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String s) {
-
-                return false;
-            }
+            public boolean onQueryTextSubmit(String s) { return false; }
 
             @Override
             public boolean onQueryTextChange(String s) {
@@ -108,6 +108,10 @@ public class ActivityMyItems extends AppCompatActivity {
         });
 
     }
+
+    /**
+     * Download the user's items from the database, and display them in the ListView
+     */
     private void downloadItems() {
         filteredItems.clear();
         myItems.clear();
@@ -139,6 +143,7 @@ public class ActivityMyItems extends AppCompatActivity {
                 });
     }
 
+    // Adapter for our listview, displaying the items
     public class ItemAdapter extends BaseAdapter implements Filterable {
         @Override
         public Filter getFilter() {
@@ -206,6 +211,7 @@ public class ActivityMyItems extends AppCompatActivity {
 
     }
 
+    // Enable the back button in the actionbar
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home) {
@@ -215,6 +221,15 @@ public class ActivityMyItems extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    /**
+     * Generate a view for the item
+     * @param item a hasmap containing; name, location, description and favourite for the item.
+     * @param userID google account unique ID
+     * @param itemID document ID
+     * @param view a view we wish to recycle, pass null to create a new view
+     * @return a view displaying the item
+     */
     private View getItemDisplay(Map<String, Object> item, String userID, String itemID, View view) {
         boolean favourite;
         try {
@@ -260,6 +275,7 @@ public class ActivityMyItems extends AppCompatActivity {
         ((TextView) layout.findViewById(R.id.txt_name)).setText(item.get("name").toString());
         ((TextView) layout.findViewById(R.id.txt_location)).setText(item.get("location").toString());
 
+        // Create a reference to the boolean we can use in lambda expression
         boolean[] favArr = { favourite };
         layout.findViewById(R.id.img_star).setOnClickListener((View innerView) -> {
 

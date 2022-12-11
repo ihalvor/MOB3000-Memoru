@@ -36,6 +36,8 @@ public class ActivityViewItem extends AppCompatActivity {
 
     private boolean isItemEdited = false;
 
+    // ActivityResultLauncher for launching the edit activity. The result is whether any changes
+    // were done.
     private ActivityResultLauncher<Intent> editLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             (ActivityResult result) -> {
@@ -83,6 +85,9 @@ public class ActivityViewItem extends AppCompatActivity {
         });
     }
 
+    /**
+     * Download and display the selected item
+     */
     private void downloadItem() {
 
         database.downloadUserItem(userID, itemID)
@@ -123,6 +128,11 @@ public class ActivityViewItem extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Display the item's receipt
+     * @param receiptUri The uri for the receipt's image
+     * @param itemName the name of the item
+     */
     private void displayReceipt(Uri receiptUri, String itemName) {
         ImageView imageView = findViewById(R.id.img_my_receipt);
         imageView.setVisibility(View.VISIBLE);
@@ -149,6 +159,11 @@ public class ActivityViewItem extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Display an item in the view
+     * @param item a hasmap containing the item's name, location, description and favourite.
+     * @param imageUri the uri for the item's image
+     */
     private void displayItemData(Map<String, Object> item, Uri imageUri) {
 
         String name         = item.get("name").toString();

@@ -50,7 +50,7 @@ public class ActivitySettings extends AppCompatActivity {
 
     }
 
-
+    // Enable the back button for the action bar
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home) {

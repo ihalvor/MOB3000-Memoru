@@ -5,6 +5,9 @@ import android.net.Uri;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Data class for an item
+ */
 public class MyItem {
 
     private String name;
@@ -23,7 +26,6 @@ public class MyItem {
     public String toString() {
         return name + " " + location;
     }
-
 
     public MyItem(Map<String, Object> item, String itemID, String userID, Uri itemImage, Uri receiptImage) {
         this.name = item.get("name").toString();

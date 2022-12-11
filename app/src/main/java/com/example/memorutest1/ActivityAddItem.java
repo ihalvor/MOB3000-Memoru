@@ -50,6 +50,7 @@ public class ActivityAddItem extends AppCompatActivity {
     private boolean newItemImage = false;
     private boolean newReceiptImage = false;
 
+    // Activity launcher for taking an image for the receipt. Result is the image
     private ActivityResultLauncher<Intent> receiptImageLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             (ActivityResult result) -> {
@@ -61,6 +62,7 @@ public class ActivityAddItem extends AppCompatActivity {
                 newReceiptImage = true;
             });
 
+    // Activity launcher for taking an image for the item. Result is the image
     private ActivityResultLauncher<Intent> itemImageLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             (ActivityResult result) -> {
@@ -113,6 +115,7 @@ public class ActivityAddItem extends AppCompatActivity {
         }
     }
 
+    // Enable back button in action bar
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home) {
@@ -122,6 +125,9 @@ public class ActivityAddItem extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Force the user out if they are not signed in
+     */
     private void checkForUser() {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -134,6 +140,9 @@ public class ActivityAddItem extends AppCompatActivity {
         }
     }
 
+    /**
+     * Launch the camera to take a picture of the receipt
+     */
     private void takeReceiptPicture() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         try {
@@ -145,6 +154,9 @@ public class ActivityAddItem extends AppCompatActivity {
         }
     }
 
+    /**
+     * Launch the camera to take a picture of the item
+     */
     private void takePicture() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         try {
@@ -156,6 +168,9 @@ public class ActivityAddItem extends AppCompatActivity {
         }
     }
 
+    /**
+     * Display the item. Used if we are editing it
+     */
     private void displayItem() {
         String name         = item.get("name").toString();
         String location     = item.get("location").toString();
@@ -188,6 +203,9 @@ public class ActivityAddItem extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Upload changes to the item to the database and storage
+     */
     private void updateItem() {
         String name             = ((EditText) findViewById(R.id.edt_name)).getText().toString();
         String location         = ((EditText) findViewById(R.id.edt_location)).getText().toString();
@@ -239,11 +257,18 @@ public class ActivityAddItem extends AppCompatActivity {
         }
     }
 
+    /**
+     * If we have updated an existing item, set result to edited, so the other views can refresh
+     * the data
+     */
     private void finishUpdatingItem() {
         setResult(RESULT_OK, new Intent().putExtra("edit", true));
         finish();
     }
 
+    /**
+     * Upload an item to the database, and the images to the cloud storage
+     */
     private void uploadItem() {
         String name = ((EditText) findViewById(R.id.edt_name)).getText().toString();
         String location = ((EditText) findViewById(R.id.edt_location)).getText().toString();

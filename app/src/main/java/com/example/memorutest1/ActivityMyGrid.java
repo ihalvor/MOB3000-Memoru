@@ -37,6 +37,8 @@ public class ActivityMyGrid extends AppCompatActivity {
 
     private int imageWidth;
 
+    // Use an activityResultLauncher to launch the item, the result is wether the item was changed
+    // or not.
     private ActivityResultLauncher<Intent> viewItemLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             (ActivityResult result) -> {

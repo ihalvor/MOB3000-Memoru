@@ -175,6 +175,9 @@ public class ActivityLogIn extends AppCompatActivity {
         }
     }
 
+    /**
+     * If firebase user is signed in, continue to the menu
+     */
     private void setFirebaseUser() {
         user = mAuth.getCurrentUser();
         if(user != null) {
@@ -187,6 +190,10 @@ public class ActivityLogIn extends AppCompatActivity {
         }
     }
 
+    /**
+     * Sign into the firebase auth with google credentials
+     * @param idToken unique google ID token
+     */
     private void signInWithCredentials(String idToken) {
         AuthCredential fireCredential = GoogleAuthProvider.getCredential(idToken, null);
 
@@ -199,6 +206,10 @@ public class ActivityLogIn extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Sign in with the old google login API if the user is not signed in to any google accounts
+     * on the device.
+     */
     private void signIntoGoogleOnDevice() {
         if(signedUpWithGoogle) return;
         else signedUpWithGoogle = true;
@@ -214,6 +225,9 @@ public class ActivityLogIn extends AppCompatActivity {
 
     }
 
+    /**
+     * If the user does not log in, display a button they can press to log in
+     */
     private void showSignInButton() {
         Button loginButton = findViewById(R.id.google_login_button);
 

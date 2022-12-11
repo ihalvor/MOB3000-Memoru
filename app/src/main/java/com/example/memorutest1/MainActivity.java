@@ -43,12 +43,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-
+    /**
+     * Checks if the user has just logged in, or is returning from another activity
+     * @return whether the user has just logged in.
+     */
     private boolean checkForJustLoggedIn() {
         return getIntent().getBooleanExtra(ActivityLogIn.FROM_LOGIN_INTENT, false);
     }
 
+    /**
+     * Throw the user out if they are not logged in
+     */
     private void checkForUser() {
 
         mAuth = FirebaseAuth.getInstance();
