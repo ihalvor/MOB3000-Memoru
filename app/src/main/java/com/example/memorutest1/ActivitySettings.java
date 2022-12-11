@@ -21,6 +21,7 @@ public class ActivitySettings extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         getSupportActionBar().setTitle("Settings");
         super.onCreate(savedInstanceState);
+        //Enabling the back button in the ActionBar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_settings);
 
@@ -35,13 +36,16 @@ public class ActivitySettings extends AppCompatActivity {
             startActivity(new Intent(this, ActivityLicense.class));
         });
 
+        //Making a AlertDialog for logging out
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         dialogBuilder.setMessage("Are you sure you want to log out?")
+                //Setting the positive button to log you out of the app
                 .setPositiveButton("Yes", (dialogInterface, i) -> {
                     FirebaseAuth.getInstance().signOut();
                     startActivity(new Intent(this, ActivityLogIn.class));
                     finish();
                 })
+                //Setting the negative button to don't do anything
                 .setNegativeButton("No", (dialogInterface, i) -> {});
 
         findViewById(R.id.btn_log_out).setOnClickListener(view -> {

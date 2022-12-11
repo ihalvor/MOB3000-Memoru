@@ -51,6 +51,7 @@ public class ActivityViewItem extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_item);
+        //Enabling the back button in the ActionBar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -71,13 +72,16 @@ public class ActivityViewItem extends AppCompatActivity {
 
         downloadItem();
 
+        //Making an AlertDialog for deleting item
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         dialogBuilder.setMessage("Are you sure you want to delete the item?")
+                //Setting the positive button to delete the item
                 .setPositiveButton("Yes", (dialogInterface, i) -> {
                     database.deleteItem(userID, itemID);
                     setResult(RESULT_OK, new Intent().putExtra("edit", true));
                     finish();
                 })
+                //Setting the negative button do don't do anything
                 .setNegativeButton("No", (dialogInterface, i) -> {});
 
         findViewById(R.id.btn_delete).setOnClickListener((View view) -> {
@@ -150,7 +154,12 @@ public class ActivityViewItem extends AppCompatActivity {
         imageView.setOnClickListener((View view) -> inspectReceipt(receiptUri, itemName));
         label.setOnClickListener((View view) -> inspectReceipt(receiptUri, itemName));
     }
-    
+
+    /**
+     * Open up new activity to view the 
+     * @param receiptUri the uri for the receipt's image
+     * @param itemName the name of the item
+     */
     private void inspectReceipt(Uri receiptUri, String itemName) {
         Intent intent = new Intent(this, ActivityViewReceipt.class)
                 .putExtra(ActivityViewReceipt.EXTRA_ITEM_NAME, itemName)
